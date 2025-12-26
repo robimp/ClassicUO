@@ -27,7 +27,7 @@ internal static class Mounts
         _mounts[0x3EA4] = new(0x00DA, 0x3EA4, 0); // 16036 frenzied ostard (=zostrich)
         _mounts[0x3EA5] = new(0x00DB, 0x3EA5, 0); // 16037 forest ostard
         _mounts[0x3EA6] = new(0x00DC, 0x3EA6, 0); // 16038 Llama
-        _mounts[0x3EA7] = new(0x0074, 0x3EA7, 0); // 16039 Nightmare / Vortex
+        _mounts[0x3EA7] = new(0x023D, 0x3EA7, 0); // 16039 Nightmare / Vortex
         _mounts[0x3EA8] = new(0x0075, 0x3EA8, 0); // 16040 Silver Steed
         _mounts[0x3EA9] = new(0x0072, 0x3EA9, 0); // 16041 Nightmare
         _mounts[0x3EAA] = new(0x0073, 0x3EAA, 0); // 16042 Ethereal Horse
@@ -81,6 +81,7 @@ internal static class Mounts
         _mounts[0x3EE0] = new(0x0675, 0x3EE0, 0); // Horse_Elemental_Fire
         _mounts[0x3EE1] = new(0x0678, 0x3EE1, 0); // Horse_Elemental_Water
         _mounts[0x3EE2] = new(0x0679, 0x3EE2, 0); // Horse_Elemental_Air
+        _mounts[0x3F0E] = new(0x003C, 0x3F0E, 0); // Drake
     }
 
     public static bool TryGet(ushort animId, out MountInfo mountInfo)
