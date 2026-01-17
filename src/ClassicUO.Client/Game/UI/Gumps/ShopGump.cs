@@ -57,6 +57,16 @@ namespace ClassicUO.Game.UI.Gumps
             _leftDown,
             _rightDown;
 
+        // Signature
+        private const int SIGNATURE_MAXIMUM_WIDTH = 130;
+        private const int SIGNATURE_ANIMATION_DURATION_TICKS = 200;
+        private const int SIGNATURE_DELAY_AFTER_ANIMATION_TICKS = 100;
+        private StbTextBox _signatureText;
+        private bool _transactionAccepted = false;
+        private long _signatureBeginTime = 0;
+        private long _signatureEndTime = 0;
+        private int _signatureFinalWidth = 0;
+
         private const int LEFT_TOP_HEIGHT = 64;
         private const int LEFT_BOTTOM_HEIGHT = 116;
 
@@ -225,8 +235,22 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 OnButtonClick((int)Buttons.Clear);
             };
+
+            _signatureText = new StbTextBox(
+                5,
+                isunicode: false,
+                align: TEXT_ALIGN_TYPE.TS_LEFT
+            )
+            {
+                IsEditable = false,
+                Text = World.Player.Name,
+                X = _accept.X + 40,
+                Y = _accept.Y - 4,
+                IsVisible = false,
+            };
             Add(_accept);
             Add(_clear);
+            Add(_signatureText);
 
             HitBox leftUp = new HitBox(
                 (leftTop.X + leftTop.Width) - 50,
@@ -415,6 +439,7 @@ namespace ClassicUO.Game.UI.Gumps
                 _accept.Y = _clear.Y = (_rightBottom.Y + _rightBottom.Height) - 50;
                 _leftDown.Y = _leftBottom.Y;
                 _rightDown.Y = _rightBottom.Y;
+                _signatureText.Y = _accept.Y - 4;
 
                 if (_playerGoldLabel != null)
                 {
@@ -451,6 +476,15 @@ namespace ClassicUO.Game.UI.Gumps
             if (_playerGoldLabel != null)
             {
                 _playerGoldLabel.Text = World.Player.Gold.ToString();
+            }
+
+            if (_transactionAccepted) {
+                bool signatureFinished = PerformSignatureAnimation();
+                if (signatureFinished)
+                {
+                    PerformTransaction();
+                    _transactionAccepted = false;
+                }
             }
 
             base.Update();
@@ -592,21 +626,7 @@ namespace ClassicUO.Game.UI.Gumps
             switch ((Buttons)buttonID)
             {
                 case Buttons.Accept:
-                    Tuple<uint, ushort>[] items = _transactionItems
-                        .Select(t => new Tuple<uint, ushort>(t.Key, (ushort)t.Value.Amount))
-                        .ToArray();
-
-                    if (IsBuyGump)
-                    {
-                        NetClient.Socket.Send_BuyRequest(LocalSerial, items);
-                    }
-                    else
-                    {
-                        NetClient.Socket.Send_SellRequest(LocalSerial, items);
-                    }
-
-                    Dispose();
-
+                    SignReceipt();
                     break;
 
                 case Buttons.Clear:
@@ -617,6 +637,77 @@ namespace ClassicUO.Game.UI.Gumps
                     }
 
                     break;
+            }
+        }
+
+        private void PerformTransaction()
+        {
+            Tuple<uint, ushort>[] items = _transactionItems
+                .Select(t => new Tuple<uint, ushort>(t.Key, (ushort)t.Value.Amount))
+                .ToArray();
+
+            if (IsBuyGump)
+            {
+                NetClient.Socket.Send_BuyRequest(LocalSerial, items);
+            }
+            else
+            {
+                NetClient.Socket.Send_SellRequest(LocalSerial, items);
+            }
+        }
+
+        private void SignReceipt()
+        {
+            _transactionAccepted = true;
+        }
+
+        private bool PerformSignatureAnimation()
+        {
+            bool animationHasEnded = false;
+
+            if (!_signatureText.IsVisible)
+            {
+                _signatureBeginTime = (long)Time.Ticks;
+                _signatureEndTime = _signatureBeginTime + SIGNATURE_ANIMATION_DURATION_TICKS + SIGNATURE_DELAY_AFTER_ANIMATION_TICKS;
+                _signatureFinalWidth = Math.Min(_signatureText.RealWidth, SIGNATURE_MAXIMUM_WIDTH);
+                _signatureText.IsVisible = true;
+                DisableGumpButtons(true);
+            }
+            else if (Time.Ticks < _signatureBeginTime + SIGNATURE_ANIMATION_DURATION_TICKS)
+            {
+                float animationProgress = (Time.Ticks - _signatureBeginTime)/(float)SIGNATURE_ANIMATION_DURATION_TICKS;
+                _signatureText.Width = (int)(animationProgress * _signatureFinalWidth);
+            }
+            else if (Time.Ticks < _signatureEndTime) {
+                _signatureText.Width = _signatureFinalWidth;
+            }
+            else
+            {
+                _signatureEndTime = 0;
+                _signatureText.IsVisible = false;
+                animationHasEnded = true;
+            }
+
+            return animationHasEnded;
+        }
+
+        // Does't disable the ShopGump itself so it can be closed in order to abort the transaction.
+        private void DisableGumpButtons(bool disable)
+        {
+            HashSet<Control> gumpControls = new HashSet<Control>
+            {
+                _leftMiddle,
+                _rightMiddle,
+                _leftBottom,
+                _rightBottom
+            };
+            for (int i = 0; i < Children.Count; i++)
+            {
+                Control child = Children[i];
+                if (!gumpControls.Contains(child))
+                {
+                    child.IsEnabled = !disable;
+                }
             }
         }
 
