@@ -418,6 +418,7 @@ namespace ClassicUO.Assets
             public uint[] Data;
             public int Width;
             public int Height;
+            public int RealWidth;
 
             public int LineCount;
             public FastList<WebLinkRect> Links;
@@ -441,6 +442,8 @@ namespace ClassicUO.Assets
                 return FontInfo.Empty;
             }
 
+            int realWidth = GetWidthASCII(font, str);
+
             if (
                 (flags & UOFONT_FIXED) != 0
                 || (flags & UOFONT_CROPPED) != 0
@@ -451,8 +454,6 @@ namespace ClassicUO.Assets
                 {
                     return FontInfo.Empty;
                 }
-
-                int realWidth = GetWidthASCII(font, str);
 
                 if (realWidth > width)
                 {
@@ -496,6 +497,7 @@ namespace ClassicUO.Assets
                         newstr,
                         color,
                         width,
+                        realWidth,
                         align,
                         flags,
                         saveHitmap
@@ -503,7 +505,7 @@ namespace ClassicUO.Assets
                 }
             }
 
-            return GeneratePixelsASCII(font, str, color, width, align, flags, saveHitmap);
+            return GeneratePixelsASCII(font, str, color, width, realWidth, align, flags, saveHitmap);
         }
 
         public string GetTextByWidthASCII(
@@ -584,6 +586,7 @@ namespace ClassicUO.Assets
             string str,
             ushort color,
             int width,
+            int realWidth,
             TEXT_ALIGN_TYPE align,
             ushort flags,
             bool saveHitmap
@@ -760,6 +763,7 @@ namespace ClassicUO.Assets
                 fi.Data = pData;
                 fi.Width = width;
                 fi.Height = height;
+                fi.RealWidth = realWidth;
                 fi.Links = null;
 
                 return fi;

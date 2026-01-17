@@ -150,6 +150,8 @@ namespace ClassicUO.Game
 
         public int Height { get; private set; }
 
+        public int RealWidth { get; private set; }
+
         public Texture2D Texture { get; set; }
 
         public static RenderedText Create(
@@ -670,6 +672,7 @@ namespace ClassicUO.Game
 
                 Width = Texture.Width;
                 Height = Texture.Height;
+                RealWidth = fi.RealWidth;
             }
 
             if (IsHTML)

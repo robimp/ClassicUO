@@ -23,6 +23,8 @@ namespace ClassicUO.Game.UI.Controls
 
         private readonly int _maxCharCount = -1;
 
+        public int RealWidth { get; private set; }
+
         public class BeforeTextChangedEventArgs : EventArgs
         {
             public BeforeTextChangedEventArgs(string previousText, string newText, int newCaretIndex)
@@ -251,6 +253,7 @@ namespace ClassicUO.Game.UI.Controls
                 string previousText = _rendererText.Text;
 
                 _rendererText.Text = value;
+                RealWidth = _rendererText.RealWidth;
 
                 if (!_is_writing)
                 {
