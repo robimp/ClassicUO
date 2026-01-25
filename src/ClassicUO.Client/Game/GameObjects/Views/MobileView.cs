@@ -764,16 +764,16 @@ namespace ClassicUO.Game.GameObjects
 
                     if (charIsSitting)
                     {
-                        Vector3 mod = CalculateSitAnimation(y, entity, isHuman, ref spriteInfo);
+                        int charY = CalculateCharY(y, entity, isHuman, ref spriteInfo);
 
                         batcher.DrawCharacterSitted(
                             spriteInfo.Texture,
                             pos,
                             rect,
-                            mod,
                             hueVec,
                             mirror,
-                            depth + 1f
+                            depth + 1f,
+                            charY
                         );
                     }
                     else
@@ -847,123 +847,18 @@ namespace ClassicUO.Game.GameObjects
             }
         }
 
-        private static Vector3 CalculateSitAnimation(
+        private static int CalculateCharY(
             int y,
             Item entity,
             bool isHuman,
             ref SpriteInfo spriteInfo
         )
         {
-            Vector3 mod = new Vector3();
-
-            const float UPPER_BODY_RATIO = 0.35f;
-            const float MID_BODY_RATIO = 0.60f;
-            const float LOWER_BODY_RATIO = 0.94f;
-
             if (entity == null && isHuman)
             {
-                int frameHeight = spriteInfo.UV.Height;
-                if (frameHeight == 0)
-                {
-                    frameHeight = 61;
-                }
-
-                _characterFrameStartY =
-                    y - (spriteInfo.Texture != null ? 0 : frameHeight - SIT_OFFSET_Y);
-                _characterFrameHeight = frameHeight;
-                _startCharacterWaistY =
-                    (int)(frameHeight * UPPER_BODY_RATIO) + _characterFrameStartY;
-                _startCharacterKneesY = (int)(frameHeight * MID_BODY_RATIO) + _characterFrameStartY;
-                _startCharacterFeetY =
-                    (int)(frameHeight * LOWER_BODY_RATIO) + _characterFrameStartY;
-
-                if (spriteInfo.Texture == null)
-                {
-                    return mod;
-                }
+                _characterFrameStartY = y;
             }
-
-            mod.X = UPPER_BODY_RATIO;
-            mod.Y = MID_BODY_RATIO;
-            mod.Z = LOWER_BODY_RATIO;
-
-            if (entity != null)
-            {
-                float itemsEndY = y + spriteInfo.UV.Height;
-
-                if (y >= _startCharacterWaistY)
-                {
-                    mod.X = 0;
-                }
-                else if (itemsEndY <= _startCharacterWaistY)
-                {
-                    mod.X = 1.0f;
-                }
-                else
-                {
-                    float upperBodyDiff = _startCharacterWaistY - y;
-                    mod.X = upperBodyDiff / spriteInfo.UV.Height;
-
-                    if (mod.X < 0)
-                    {
-                        mod.X = 0;
-                    }
-                }
-
-                if (_startCharacterWaistY >= itemsEndY || y >= _startCharacterKneesY)
-                {
-                    mod.Y = 0;
-                }
-                else if (_startCharacterWaistY <= y && itemsEndY <= _startCharacterKneesY)
-                {
-                    mod.Y = 1.0f;
-                }
-                else
-                {
-                    float midBodyDiff;
-
-                    if (y >= _startCharacterWaistY)
-                    {
-                        midBodyDiff = _startCharacterKneesY - y;
-                    }
-                    else if (itemsEndY <= _startCharacterKneesY)
-                    {
-                        midBodyDiff = itemsEndY - _startCharacterWaistY;
-                    }
-                    else
-                    {
-                        midBodyDiff = _startCharacterKneesY - _startCharacterWaistY;
-                    }
-
-                    mod.Y = mod.X + midBodyDiff / spriteInfo.UV.Height;
-
-                    if (mod.Y < 0)
-                    {
-                        mod.Y = 0;
-                    }
-                }
-
-                if (itemsEndY <= _startCharacterKneesY)
-                {
-                    mod.Z = 0;
-                }
-                else if (y >= _startCharacterKneesY)
-                {
-                    mod.Z = 1.0f;
-                }
-                else
-                {
-                    float lowerBodyDiff = itemsEndY - _startCharacterKneesY;
-                    mod.Z = mod.Y + lowerBodyDiff / spriteInfo.UV.Height;
-
-                    if (mod.Z < 0)
-                    {
-                        mod.Z = 0;
-                    }
-                }
-            }
-
-            return mod;
+            return _characterFrameStartY;
         }
 
         public override bool CheckMouseSelection()
