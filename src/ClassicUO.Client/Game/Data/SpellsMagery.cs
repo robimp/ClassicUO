@@ -81,7 +81,8 @@ namespace ClassicUO.Game.Data
                         0x1B5C,
                         "In Por Ylem",
                         TargetType.Harmful,
-                        Reagents.SulfurousAsh
+                        Reagents.BlackPearl,
+                        Reagents.Nightshade
                     )
                 },
                 {
@@ -253,7 +254,8 @@ namespace ClassicUO.Game.Data
                         0x1B69,
                         "Vas Flam",
                         TargetType.Harmful,
-                        Reagents.BlackPearl
+                        Reagents.BlackPearl,
+                        Reagents.SulfurousAsh
                     )
                 },
                 {
@@ -415,6 +417,7 @@ namespace ClassicUO.Game.Data
                         0x1B75,
                         "Por Ort Grav",
                         TargetType.Harmful,
+                        Reagents.BlackPearl,
                         Reagents.MandrakeRoot,
                         Reagents.SulfurousAsh
                     )
@@ -600,7 +603,8 @@ namespace ClassicUO.Game.Data
                         "Vas Ort Flam",
                         TargetType.Harmful,
                         Reagents.Bloodmoss,
-                        Reagents.MandrakeRoot
+                        Reagents.MandrakeRoot,
+                        Reagents.SulfurousAsh
                     )
                 },
                 {
@@ -757,7 +761,7 @@ namespace ClassicUO.Game.Data
                         Reagents.BlackPearl,
                         Reagents.Garlic,
                         Reagents.MandrakeRoot,
-                        Reagents.SulfurousAsh
+                        Reagents.SpidersSilk
                     )
                 },
                 {
