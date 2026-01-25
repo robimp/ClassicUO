@@ -760,9 +760,11 @@ namespace ClassicUO.Game.GameObjects
                 if (spriteInfo.Texture != null)
                 {
                     Vector2 pos = new Vector2(x, y);
+                    // Vector2 pos = new Vector2(x + 9, y);
                     Rectangle rect = spriteInfo.UV;
 
                     if (charIsSitting)
+                    // if (false)
                     {
                         Vector3 mod = CalculateSitAnimation(y, entity, isHuman, ref spriteInfo);
 
@@ -860,27 +862,35 @@ namespace ClassicUO.Game.GameObjects
             const float MID_BODY_RATIO = 0.60f;
             const float LOWER_BODY_RATIO = 0.94f;
 
-            if (entity == null && isHuman)
+            if (isHuman)
             {
-                int frameHeight = spriteInfo.UV.Height;
-                if (frameHeight == 0)
-                {
-                    frameHeight = 61;
-                }
+                // int start = y - (spriteInfo.UV.Height - SIT_OFFSET_Y);
+                // mod.X = 0.35f / spriteInfo.UV.Height;
+                // mod.Y = mod.X + 0.60f / spriteInfo.UV.Height;
+                // mod.Z = mod.Y + 0.94f / spriteInfo.UV.Height;
+                mod.X = (int)(0.36f*spriteInfo.UV.Height)/(float)(spriteInfo.UV.Height);
+                mod.Y = (int)(0.64f*spriteInfo.UV.Height)/(float)(spriteInfo.UV.Height);
+                mod.Z = (int)(0.92f*spriteInfo.UV.Height)/(float)(spriteInfo.UV.Height);
+                return mod;
+                // int frameHeight = spriteInfo.UV.Height;
+                // if (frameHeight == 0)
+                // {
+                //     frameHeight = 61;
+                // }
 
-                _characterFrameStartY =
-                    y - (spriteInfo.Texture != null ? 0 : frameHeight - SIT_OFFSET_Y);
-                _characterFrameHeight = frameHeight;
-                _startCharacterWaistY =
-                    (int)(frameHeight * UPPER_BODY_RATIO) + _characterFrameStartY;
-                _startCharacterKneesY = (int)(frameHeight * MID_BODY_RATIO) + _characterFrameStartY;
-                _startCharacterFeetY =
-                    (int)(frameHeight * LOWER_BODY_RATIO) + _characterFrameStartY;
+                // _characterFrameStartY =
+                //     y - (spriteInfo.Texture != null ? 0 : frameHeight - SIT_OFFSET_Y);
+                // _characterFrameHeight = frameHeight;
+                // _startCharacterWaistY =
+                //     (int)(frameHeight * UPPER_BODY_RATIO) + _characterFrameStartY;
+                // _startCharacterKneesY = (int)(frameHeight * MID_BODY_RATIO) + _characterFrameStartY;
+                // _startCharacterFeetY =
+                //     (int)(frameHeight * LOWER_BODY_RATIO) + _characterFrameStartY;
 
-                if (spriteInfo.Texture == null)
-                {
-                    return mod;
-                }
+                // if (spriteInfo.Texture == null)
+                // {
+                //     return mod;
+                // }
             }
 
             mod.X = UPPER_BODY_RATIO;
