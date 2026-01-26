@@ -394,33 +394,26 @@ namespace ClassicUO.Renderer
                 position.Y += 1.0f;
             }
 
+            const float HEIGHT_TORSO_END = 22.0f;
+            const float HEIGHT_LAP_END = 37.0f;
+            const float HEIGHT_LAP_LENGTH = HEIGHT_LAP_END - HEIGHT_TORSO_END;
+            const float HEIGHT_LEG_BEGIN = 41f;
+            const float HEIGHT_LEG_END = 61f;
+            const float HEIGHT_LEG_LENGTH = HEIGHT_LEG_END - HEIGHT_LEG_BEGIN;
+
             // Torso
             ///////////////////////////////////////////////////////////////////
             List<Vector2> vertex_points = new List<Vector2>();
             vertex_points.Add(new Vector2(            0.0f + torsoOffset,  0.0f));
             vertex_points.Add(new Vector2(sourceRect.Width + torsoOffset,  0.0f));
-            vertex_points.Add(new Vector2(            0.0f + torsoOffset, Math.Min(sourceRect.Height, 23.0f)));
-            vertex_points.Add(new Vector2(sourceRect.Width + torsoOffset, Math.Min(sourceRect.Height, 23.0f)));
+            vertex_points.Add(new Vector2(            0.0f + torsoOffset, Math.Min(sourceRect.Height, HEIGHT_TORSO_END)));
+            vertex_points.Add(new Vector2(sourceRect.Width + torsoOffset, Math.Min(sourceRect.Height, HEIGHT_TORSO_END)));
 
             List<Vector2> texture_points = new List<Vector2>();
-            // if (!flip)
-            // {
-            //     texture_points.Add(new Vector2(            0.0f,  0.0f));
-            //     texture_points.Add(new Vector2(sourceRect.Width,  0.0f));
-            //     texture_points.Add(new Vector2(            0.0f, Math.Min(sourceRect.Height, 23.0f)));
-            //     texture_points.Add(new Vector2(sourceRect.Width, Math.Min(sourceRect.Height, 23.0f)));
-            // }
-            // else
-            // {
-            //     texture_points.Add(new Vector2(sourceRect.Width,  0.0f));
-            //     texture_points.Add(new Vector2(            0.0f,  0.0f));
-            //     texture_points.Add(new Vector2(sourceRect.Width, Math.Min(sourceRect.Height, 23.0f)));
-            //     texture_points.Add(new Vector2(            0.0f, Math.Min(sourceRect.Height, 23.0f)));
-            // }
             texture_points.Add(new Vector2(            0.0f,  0.0f));
             texture_points.Add(new Vector2(sourceRect.Width,  0.0f));
-            texture_points.Add(new Vector2(            0.0f, Math.Min(sourceRect.Height, 23.0f)));
-            texture_points.Add(new Vector2(sourceRect.Width, Math.Min(sourceRect.Height, 23.0f)));
+            texture_points.Add(new Vector2(            0.0f, Math.Min(sourceRect.Height, HEIGHT_TORSO_END)));
+            texture_points.Add(new Vector2(sourceRect.Width, Math.Min(sourceRect.Height, HEIGHT_TORSO_END)));
             if (flip)
             {
                 (texture_points[0], texture_points[1]) = (texture_points[1], texture_points[0]);
@@ -441,36 +434,22 @@ namespace ClassicUO.Renderer
 
             // Lap
             ///////////////////////////////////////////////////////////////////
-            if (sourceRect.Height <= 23.0f)
+            if (sourceRect.Height <= HEIGHT_TORSO_END)
             {
                 return;
             }
 
-            position.Y += 23.0f;
+            position.Y += HEIGHT_TORSO_END;
 
             vertex_points[0] = new Vector2(            0.0f + torsoOffset,  0.0f);
             vertex_points[1] = new Vector2(sourceRect.Width + torsoOffset,  0.0f);
-            vertex_points[2] = new Vector2(                          0.0f, Math.Min(sourceRect.Height - 23.0f, 16.0f));
-            vertex_points[3] = new Vector2(              sourceRect.Width, Math.Min(sourceRect.Height - 23.0f, 16.0f));
+            vertex_points[2] = new Vector2(                          0.0f, Math.Min(sourceRect.Height - HEIGHT_TORSO_END, HEIGHT_LAP_LENGTH));
+            vertex_points[3] = new Vector2(              sourceRect.Width, Math.Min(sourceRect.Height - HEIGHT_TORSO_END, HEIGHT_LAP_LENGTH));
 
-            // if (!flip)
-            // {
-            //     texture_points[0] = new Vector2(            0.0f,  23.0f);
-            //     texture_points[1] = new Vector2(sourceRect.Width,  23.0f);
-            //     texture_points[2] = new Vector2(            0.0f, Math.Min(sourceRect.Height, 39.0f));
-            //     texture_points[3] = new Vector2(sourceRect.Width, Math.Min(sourceRect.Height, 39.0f));
-            // }
-            // else
-            // {
-            //     texture_points[0] = new Vector2(sourceRect.Width,  23.0f);
-            //     texture_points[1] = new Vector2(            0.0f,  23.0f);
-            //     texture_points[2] = new Vector2(sourceRect.Width, Math.Min(sourceRect.Height, 39.0f));
-            //     texture_points[3] = new Vector2(            0.0f, Math.Min(sourceRect.Height, 39.0f));
-            // }
-            texture_points[0] = new Vector2(            0.0f,  23.0f);
-            texture_points[1] = new Vector2(sourceRect.Width,  23.0f);
-            texture_points[2] = new Vector2(            0.0f, Math.Min(sourceRect.Height, 39.0f));
-            texture_points[3] = new Vector2(sourceRect.Width, Math.Min(sourceRect.Height, 39.0f));
+            texture_points[0] = new Vector2(            0.0f,  HEIGHT_TORSO_END);
+            texture_points[1] = new Vector2(sourceRect.Width,  HEIGHT_TORSO_END);
+            texture_points[2] = new Vector2(            0.0f, Math.Min(sourceRect.Height, HEIGHT_LAP_END + 2));
+            texture_points[3] = new Vector2(sourceRect.Width, Math.Min(sourceRect.Height, HEIGHT_LAP_END + 2));
             if (flip)
             {
                 (texture_points[0], texture_points[1]) = (texture_points[1], texture_points[0]);
@@ -496,31 +475,17 @@ namespace ClassicUO.Renderer
                 return;
             }
 
-            position.Y += 16.0f;
+            position.Y += HEIGHT_LAP_LENGTH;
 
             vertex_points[0] = new Vector2(            0.0f,  0.0f);
             vertex_points[1] = new Vector2(sourceRect.Width,  0.0f);
-            vertex_points[2] = new Vector2(            0.0f, Math.Min(sourceRect.Height - 41f, 20f));
-            vertex_points[3] = new Vector2(sourceRect.Width, Math.Min(sourceRect.Height - 41f, 20f));
+            vertex_points[2] = new Vector2(            0.0f, Math.Min(sourceRect.Height - HEIGHT_LEG_BEGIN, HEIGHT_LEG_LENGTH));
+            vertex_points[3] = new Vector2(sourceRect.Width, Math.Min(sourceRect.Height - HEIGHT_LEG_BEGIN, HEIGHT_LEG_LENGTH));
 
-            // if (!flip)
-            // {
-            //     texture_points[0] = new Vector2(            0.0f,  41f);
-            //     texture_points[1] = new Vector2(sourceRect.Width,  41f);
-            //     texture_points[2] = new Vector2(            0.0f, Math.Min(sourceRect.Height, 61f));
-            //     texture_points[3] = new Vector2(sourceRect.Width, Math.Min(sourceRect.Height, 61f));
-            // }
-            // else
-            // {
-            //     texture_points[0] = new Vector2(sourceRect.Width,  41f);
-            //     texture_points[1] = new Vector2(            0.0f,  41f);
-            //     texture_points[2] = new Vector2(sourceRect.Width, Math.Min(sourceRect.Height, 61f));
-            //     texture_points[3] = new Vector2(            0.0f, Math.Min(sourceRect.Height, 61f));
-            // }
-            texture_points[0] = new Vector2(            0.0f,  41f);
-            texture_points[1] = new Vector2(sourceRect.Width,  41f);
-            texture_points[2] = new Vector2(            0.0f, Math.Min(sourceRect.Height, 61f));
-            texture_points[3] = new Vector2(sourceRect.Width, Math.Min(sourceRect.Height, 61f));
+            texture_points[0] = new Vector2(            0.0f,  HEIGHT_LEG_BEGIN);
+            texture_points[1] = new Vector2(sourceRect.Width,  HEIGHT_LEG_BEGIN);
+            texture_points[2] = new Vector2(            0.0f, Math.Min(sourceRect.Height, HEIGHT_LEG_END));
+            texture_points[3] = new Vector2(sourceRect.Width, Math.Min(sourceRect.Height, HEIGHT_LEG_END));
             if (flip)
             {
                 (texture_points[0], texture_points[1]) = (texture_points[1], texture_points[0]);
