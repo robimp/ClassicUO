@@ -400,19 +400,29 @@ namespace ClassicUO.Renderer
             const float HEIGHT_LEG_END = 61f;
             const float HEIGHT_LEG_LENGTH = HEIGHT_LEG_END - HEIGHT_LEG_BEGIN;
 
-            // Torso
-            ///////////////////////////////////////////////////////////////////
             List<Vector2> vertex_points = new List<Vector2>();
-            vertex_points.Add(new Vector2(            0.0f + torsoOffset,  0.0f));
-            vertex_points.Add(new Vector2(sourceRect.Width + torsoOffset,  0.0f));
-            vertex_points.Add(new Vector2(            0.0f + torsoOffset, Math.Min(sourceRect.Height, HEIGHT_TORSO_END)));
-            vertex_points.Add(new Vector2(sourceRect.Width + torsoOffset, Math.Min(sourceRect.Height, HEIGHT_TORSO_END)));
+            vertex_points.Add(new Vector2(0.0f, 0.0f));
+            vertex_points.Add(new Vector2(0.0f, 0.0f));
+            vertex_points.Add(new Vector2(0.0f, 0.0f));
+            vertex_points.Add(new Vector2(0.0f, 0.0f));
 
             List<Vector2> texture_points = new List<Vector2>();
-            texture_points.Add(new Vector2(            0.0f,  0.0f));
-            texture_points.Add(new Vector2(sourceRect.Width,  0.0f));
-            texture_points.Add(new Vector2(            0.0f, Math.Min(sourceRect.Height, HEIGHT_TORSO_END)));
-            texture_points.Add(new Vector2(sourceRect.Width, Math.Min(sourceRect.Height, HEIGHT_TORSO_END)));
+            texture_points.Add(new Vector2(0.0f, 0.0f));
+            texture_points.Add(new Vector2(0.0f, 0.0f));
+            texture_points.Add(new Vector2(0.0f, 0.0f));
+            texture_points.Add(new Vector2(0.0f, 0.0f));
+
+            // Torso
+            ///////////////////////////////////////////////////////////////////
+            vertex_points[0] = new Vector2(            0.0f + torsoOffset,  0.0f);
+            vertex_points[1] = new Vector2(sourceRect.Width + torsoOffset,  0.0f);
+            vertex_points[2] = new Vector2(            0.0f + torsoOffset, Math.Min(sourceRect.Height, HEIGHT_TORSO_END));
+            vertex_points[3] = new Vector2(sourceRect.Width + torsoOffset, Math.Min(sourceRect.Height, HEIGHT_TORSO_END));
+
+            texture_points[0] = new Vector2(            0.0f,  0.0f);
+            texture_points[1] = new Vector2(sourceRect.Width,  0.0f);
+            texture_points[2] = new Vector2(            0.0f, Math.Min(sourceRect.Height, HEIGHT_TORSO_END));
+            texture_points[3] = new Vector2(sourceRect.Width, Math.Min(sourceRect.Height, HEIGHT_TORSO_END));
             if (flip)
             {
                 (texture_points[0], texture_points[1]) = (texture_points[1], texture_points[0]);
