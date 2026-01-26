@@ -378,27 +378,34 @@ namespace ClassicUO.Renderer
             Rectangle sourceRect,
             Vector3 hue,
             bool flip,
-            float depth
+            float depth,
+            int charY
         )
         {
             float torsoOffset = flip ? -8.0f : 8.0f;
 
+            float initialY = position.Y;
+            float yDiff = initialY - charY;
+
+            float y_offset;
+
             if (!flip)
             {
                 position.X += 2.0f;
+                y_offset = 0.0f;
             }
             else
             {
                 position.X += 9.0f;
-                position.Y += 1.0f;
+                y_offset = 1.0f;
             }
 
-            const float HEIGHT_TORSO_END = 22.0f;
-            const float HEIGHT_LAP_END = 37.0f;
-            const float HEIGHT_LAP_LENGTH = HEIGHT_LAP_END - HEIGHT_TORSO_END;
-            const float HEIGHT_LEG_BEGIN = 41f;
-            const float HEIGHT_LEG_END = 61f;
-            const float HEIGHT_LEG_LENGTH = HEIGHT_LEG_END - HEIGHT_LEG_BEGIN;
+            float HEIGHT_TORSO_END = 22.0f - yDiff;
+            float HEIGHT_LAP_END = 37.0f - yDiff;
+            float HEIGHT_LAP_LENGTH = HEIGHT_LAP_END - HEIGHT_TORSO_END;
+            float HEIGHT_LEG_BEGIN = 41f - yDiff;
+            float HEIGHT_LEG_END = 61f - yDiff;
+            float HEIGHT_LEG_LENGTH = HEIGHT_LEG_END - HEIGHT_LEG_BEGIN;
 
             List<Vector2> vertex_points = new List<Vector2>();
             vertex_points.Add(new Vector2(0.0f, 0.0f));
@@ -414,73 +421,76 @@ namespace ClassicUO.Renderer
 
             // Torso
             ///////////////////////////////////////////////////////////////////
-            vertex_points[0] = new Vector2(            0.0f + torsoOffset,  0.0f);
-            vertex_points[1] = new Vector2(sourceRect.Width + torsoOffset,  0.0f);
-            vertex_points[2] = new Vector2(            0.0f + torsoOffset, Math.Min(sourceRect.Height, HEIGHT_TORSO_END));
-            vertex_points[3] = new Vector2(sourceRect.Width + torsoOffset, Math.Min(sourceRect.Height, HEIGHT_TORSO_END));
-
-            texture_points[0] = new Vector2(            0.0f,  0.0f);
-            texture_points[1] = new Vector2(sourceRect.Width,  0.0f);
-            texture_points[2] = new Vector2(            0.0f, Math.Min(sourceRect.Height, HEIGHT_TORSO_END));
-            texture_points[3] = new Vector2(sourceRect.Width, Math.Min(sourceRect.Height, HEIGHT_TORSO_END));
-            if (flip)
+            if (0 < HEIGHT_TORSO_END)
             {
-                (texture_points[0], texture_points[1]) = (texture_points[1], texture_points[0]);
-                (texture_points[2], texture_points[3]) = (texture_points[3], texture_points[2]);
-            }
+                position.Y = initialY + y_offset;
 
-            AddSittingPortion(
-                texture,
-                position,
-                sourceRect,
-                vertex_points,
-                texture_points,
-                hue,
-                depth
-            );
+                vertex_points[0] = new Vector2(            0.0f + torsoOffset,  0.0f);
+                vertex_points[1] = new Vector2(sourceRect.Width + torsoOffset,  0.0f);
+                vertex_points[2] = new Vector2(            0.0f + torsoOffset, Math.Min(sourceRect.Height, HEIGHT_TORSO_END));
+                vertex_points[3] = new Vector2(sourceRect.Width + torsoOffset, Math.Min(sourceRect.Height, HEIGHT_TORSO_END));
+
+                texture_points[0] = new Vector2(            0.0f,  0.0f);
+                texture_points[1] = new Vector2(sourceRect.Width,  0.0f);
+                texture_points[2] = new Vector2(            0.0f, Math.Min(sourceRect.Height, HEIGHT_TORSO_END));
+                texture_points[3] = new Vector2(sourceRect.Width, Math.Min(sourceRect.Height, HEIGHT_TORSO_END));
+                if (flip)
+                {
+                    (texture_points[0], texture_points[1]) = (texture_points[1], texture_points[0]);
+                    (texture_points[2], texture_points[3]) = (texture_points[3], texture_points[2]);
+                }
+
+                AddSittingPortion(
+                    texture,
+                    position,
+                    sourceRect,
+                    vertex_points,
+                    texture_points,
+                    hue,
+                    depth
+                );
+            }
 
             // Lap
             ///////////////////////////////////////////////////////////////////
-            if (sourceRect.Height <= HEIGHT_TORSO_END)
+            if (sourceRect.Height > HEIGHT_TORSO_END && 0 < HEIGHT_LAP_END)
             {
-                return;
+                position.Y = initialY + y_offset + HEIGHT_TORSO_END;
+
+                vertex_points[0] = new Vector2(            0.0f + torsoOffset,  0.0f);
+                vertex_points[1] = new Vector2(sourceRect.Width + torsoOffset,  0.0f);
+                vertex_points[2] = new Vector2(                          0.0f, Math.Min(sourceRect.Height - HEIGHT_TORSO_END, HEIGHT_LAP_LENGTH));
+                vertex_points[3] = new Vector2(              sourceRect.Width, Math.Min(sourceRect.Height - HEIGHT_TORSO_END, HEIGHT_LAP_LENGTH));
+
+                texture_points[0] = new Vector2(            0.0f,  HEIGHT_TORSO_END);
+                texture_points[1] = new Vector2(sourceRect.Width,  HEIGHT_TORSO_END);
+                texture_points[2] = new Vector2(            0.0f, Math.Min(sourceRect.Height, HEIGHT_LAP_END + 2));
+                texture_points[3] = new Vector2(sourceRect.Width, Math.Min(sourceRect.Height, HEIGHT_LAP_END + 2));
+                if (flip)
+                {
+                    (texture_points[0], texture_points[1]) = (texture_points[1], texture_points[0]);
+                    (texture_points[2], texture_points[3]) = (texture_points[3], texture_points[2]);
+                }
+
+                AddSittingPortion(
+                    texture,
+                    position,
+                    sourceRect,
+                    vertex_points,
+                    texture_points,
+                    hue,
+                    depth
+                );
             }
-
-            position.Y += HEIGHT_TORSO_END;
-
-            vertex_points[0] = new Vector2(            0.0f + torsoOffset,  0.0f);
-            vertex_points[1] = new Vector2(sourceRect.Width + torsoOffset,  0.0f);
-            vertex_points[2] = new Vector2(                          0.0f, Math.Min(sourceRect.Height - HEIGHT_TORSO_END, HEIGHT_LAP_LENGTH));
-            vertex_points[3] = new Vector2(              sourceRect.Width, Math.Min(sourceRect.Height - HEIGHT_TORSO_END, HEIGHT_LAP_LENGTH));
-
-            texture_points[0] = new Vector2(            0.0f,  HEIGHT_TORSO_END);
-            texture_points[1] = new Vector2(sourceRect.Width,  HEIGHT_TORSO_END);
-            texture_points[2] = new Vector2(            0.0f, Math.Min(sourceRect.Height, HEIGHT_LAP_END + 2));
-            texture_points[3] = new Vector2(sourceRect.Width, Math.Min(sourceRect.Height, HEIGHT_LAP_END + 2));
-            if (flip)
-            {
-                (texture_points[0], texture_points[1]) = (texture_points[1], texture_points[0]);
-                (texture_points[2], texture_points[3]) = (texture_points[3], texture_points[2]);
-            }
-
-            AddSittingPortion(
-                texture,
-                position,
-                sourceRect,
-                vertex_points,
-                texture_points,
-                hue,
-                depth
-            );
 
             // Legs
             ///////////////////////////////////////////////////////////////////
-            if (sourceRect.Height <= 41.0f)
+            if (sourceRect.Height <= HEIGHT_LEG_BEGIN)
             {
                 return;
             }
 
-            position.Y += HEIGHT_LAP_LENGTH;
+            position.Y = initialY + y_offset + HEIGHT_TORSO_END + HEIGHT_LAP_LENGTH;
 
             vertex_points[0] = new Vector2(            0.0f,  0.0f);
             vertex_points[1] = new Vector2(sourceRect.Width,  0.0f);
