@@ -463,16 +463,20 @@ namespace ClassicUO.Renderer
                 if (HEIGHT_TORSO_END > 0)
                 {
                     // Top portion could be distorted
+                    float bottonLeftVertexX = torsoOffset*(1.0f - lapPortionRatio);
+                    float bottonRightVertexX = bottonLeftVertexX + sourceRect.Width;
                     vertex_points[0] = new Vector2(             0.0f + torsoOffset,             0.0f);
                     vertex_points[1] = new Vector2( sourceRect.Width + torsoOffset,             0.0f);
-                    vertex_points[2] = new Vector2(         1.0f - lapPortionRatio, lapPortionHeight);
-                    vertex_points[3] = new Vector2(               sourceRect.Width, lapPortionHeight);
+                    vertex_points[2] = new Vector2(              bottonLeftVertexX, lapPortionHeight);
+                    vertex_points[3] = new Vector2(             bottonRightVertexX, lapPortionHeight);
                 }
                 else
                 {
                     // Bottom portion is being distorted
-                    vertex_points[0] = new Vector2(              0.0f + lapPortionRatio*torsoOffset,             0.0f);
-                    vertex_points[1] = new Vector2(  sourceRect.Width + lapPortionRatio*torsoOffset,             0.0f);
+                    float topLeftVertexX = lapPortionRatio*torsoOffset;
+                    float topRightVertexX = topLeftVertexX + sourceRect.Width;
+                    vertex_points[0] = new Vector2(              topLeftVertexX,             0.0f);
+                    vertex_points[1] = new Vector2(  topRightVertexX,             0.0f);
                     vertex_points[2] = new Vector2(                                            0.0f, lapPortionHeight);
                     vertex_points[3] = new Vector2(                                sourceRect.Width, lapPortionHeight);
                 }
