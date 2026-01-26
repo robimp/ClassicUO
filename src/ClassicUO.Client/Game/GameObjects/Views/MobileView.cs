@@ -772,7 +772,6 @@ namespace ClassicUO.Game.GameObjects
                             spriteInfo.Texture,
                             pos,
                             rect,
-                            mod,
                             hueVec,
                             mirror,
                             depth + 1f

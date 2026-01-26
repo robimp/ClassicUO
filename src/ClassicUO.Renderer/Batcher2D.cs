@@ -376,7 +376,6 @@ namespace ClassicUO.Renderer
             Texture2D texture,
             Vector2 position,
             Rectangle sourceRect,
-            Vector3 mod,
             Vector3 hue,
             bool flip,
             float depth
