@@ -475,10 +475,10 @@ namespace ClassicUO.Renderer
                     // Bottom portion is being distorted
                     float topLeftVertexX = lapPortionRatio*torsoOffset;
                     float topRightVertexX = topLeftVertexX + sourceRect.Width;
-                    vertex_points[0] = new Vector2(              topLeftVertexX,             0.0f);
-                    vertex_points[1] = new Vector2(  topRightVertexX,             0.0f);
-                    vertex_points[2] = new Vector2(                                            0.0f, lapPortionHeight);
-                    vertex_points[3] = new Vector2(                                sourceRect.Width, lapPortionHeight);
+                    vertex_points[0] = new Vector2(  topLeftVertexX,             0.0f);
+                    vertex_points[1] = new Vector2( topRightVertexX,             0.0f);
+                    vertex_points[2] = new Vector2(            0.0f, lapPortionHeight);
+                    vertex_points[3] = new Vector2(sourceRect.Width, lapPortionHeight);
                 }
 
                 texture_points[0] = new Vector2(            0.0f,  HEIGHT_TORSO_END);
