@@ -432,8 +432,6 @@ namespace ClassicUO.Renderer
             AddSittingPortion(
                 texture,
                 position,
-                0f,
-                0f,
                 sourceRect,
                 vertex_points,
                 texture_points,
@@ -468,8 +466,6 @@ namespace ClassicUO.Renderer
             AddSittingPortion(
                 texture,
                 position,
-                0.0f,
-                0.0f,
                 sourceRect,
                 vertex_points,
                 texture_points,
@@ -504,8 +500,6 @@ namespace ClassicUO.Renderer
             AddSittingPortion(
                 texture,
                 position,
-                0.0f,
-                0.0f,
                 sourceRect,
                 vertex_points,
                 texture_points,
@@ -732,8 +726,6 @@ namespace ClassicUO.Renderer
         (
             Texture2D texture,
             Vector2 position,
-            float x_offset,
-            float y_offset,
             Rectangle sourceRect,
             List<Vector2> vertex_points,
             List<Vector2> texture_points,
@@ -747,17 +739,17 @@ namespace ClassicUO.Renderer
 
             ref PositionNormalTextureColor4 vertex = ref _vertexInfo[_numSprites];
 
-            vertex.Position0.X = position.X + x_offset + vertex_points[0].X;
-            vertex.Position0.Y = position.Y + y_offset + vertex_points[0].Y;
+            vertex.Position0.X = position.X + vertex_points[0].X;
+            vertex.Position0.Y = position.Y + vertex_points[0].Y;
 
-            vertex.Position1.X = position.X + x_offset + vertex_points[1].X;
-            vertex.Position1.Y = position.Y + y_offset + vertex_points[1].Y;
+            vertex.Position1.X = position.X + vertex_points[1].X;
+            vertex.Position1.Y = position.Y + vertex_points[1].Y;
 
-            vertex.Position2.X = position.X + x_offset + vertex_points[2].X;
-            vertex.Position2.Y = position.Y + y_offset + vertex_points[2].Y;
+            vertex.Position2.X = position.X + vertex_points[2].X;
+            vertex.Position2.Y = position.Y + vertex_points[2].Y;
 
-            vertex.Position3.X = position.X + x_offset + vertex_points[3].X;
-            vertex.Position3.Y = position.Y + y_offset + vertex_points[3].Y;
+            vertex.Position3.X = position.X + vertex_points[3].X;
+            vertex.Position3.Y = position.Y + vertex_points[3].Y;
 
             vertex.Position0.Z = depth;
             vertex.Position1.Z = depth;
