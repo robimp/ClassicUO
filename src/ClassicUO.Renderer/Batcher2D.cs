@@ -457,10 +457,25 @@ namespace ClassicUO.Renderer
             {
                 position.Y = initialY + y_offset + HEIGHT_TORSO_END;
 
-                vertex_points[0] = new Vector2(            0.0f + torsoOffset,  0.0f);
-                vertex_points[1] = new Vector2(sourceRect.Width + torsoOffset,  0.0f);
-                vertex_points[2] = new Vector2(                          0.0f, Math.Min(sourceRect.Height - HEIGHT_TORSO_END, HEIGHT_LAP_LENGTH));
-                vertex_points[3] = new Vector2(              sourceRect.Width, Math.Min(sourceRect.Height - HEIGHT_TORSO_END, HEIGHT_LAP_LENGTH));
+                float lapPortionHeight = Math.Min(sourceRect.Height - HEIGHT_TORSO_END, HEIGHT_LAP_LENGTH);
+                float lapPortionRatio = lapPortionHeight / HEIGHT_LAP_LENGTH;
+
+                if (HEIGHT_TORSO_END > 0)
+                {
+                    // Top portion could be distorted
+                    vertex_points[0] = new Vector2(             0.0f + torsoOffset,             0.0f);
+                    vertex_points[1] = new Vector2( sourceRect.Width + torsoOffset,             0.0f);
+                    vertex_points[2] = new Vector2(         1.0f - lapPortionRatio, lapPortionHeight);
+                    vertex_points[3] = new Vector2(               sourceRect.Width, lapPortionHeight);
+                }
+                else
+                {
+                    // Bottom portion is being distorted
+                    vertex_points[0] = new Vector2(              0.0f + lapPortionRatio*torsoOffset,             0.0f);
+                    vertex_points[1] = new Vector2(  sourceRect.Width + lapPortionRatio*torsoOffset,             0.0f);
+                    vertex_points[2] = new Vector2(                                            0.0f, lapPortionHeight);
+                    vertex_points[3] = new Vector2(                                sourceRect.Width, lapPortionHeight);
+                }
 
                 texture_points[0] = new Vector2(            0.0f,  HEIGHT_TORSO_END);
                 texture_points[1] = new Vector2(sourceRect.Width,  HEIGHT_TORSO_END);
