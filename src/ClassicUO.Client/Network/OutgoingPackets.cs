@@ -417,7 +417,8 @@ namespace ClassicUO.Network
                 writer.WriteZero(2);
             }
 
-            Item pants = character.FindItemByLayer(Layer.Pants);
+            Item pants = character.FindItemByLayer(
+                    character.Flags.HasFlag(Flags.Female) ? Layer.Skirt : Layer.Pants);
 
             if (pants != null)
             {

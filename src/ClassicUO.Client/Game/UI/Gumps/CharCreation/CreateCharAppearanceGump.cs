@@ -273,7 +273,7 @@ namespace ClassicUO.Game.UI.Gumps.CharCreation
                     it = CreateItem(0x1710, 0x0384, Layer.Shoes);
                     _character.PushToBack(it);
 
-                    it = CreateItem(0x1531, CurrentColorOption[Layer.Pants].Item2, Layer.Skirt);
+                    it = CreateItem(0x1531, CurrentColorOption[Layer.Skirt].Item2, Layer.Skirt);
 
                     _character.PushToBack(it);
 
@@ -307,7 +307,7 @@ namespace ClassicUO.Game.UI.Gumps.CharCreation
                         it = CreateItem(0x1710, 0x0384, Layer.Shoes);
                         _character.PushToBack(it);
 
-                        it = CreateItem(0x1531, CurrentColorOption[Layer.Pants].Item2, Layer.Pants);
+                        it = CreateItem(0x1531, CurrentColorOption[Layer.Skirt].Item2, Layer.Skirt);
 
                         _character.PushToBack(it);
 
@@ -522,10 +522,11 @@ namespace ClassicUO.Game.UI.Gumps.CharCreation
                     489,
                     225,
                     null,
-                    Layer.Pants,
+                    _characterInfo.IsFemale ? Layer.Skirt : Layer.Pants,
                     3000441,
                     10,
-                    20
+                    20,
+                    _characterInfo.IsFemale ? Layer.Pants : Layer.Skirt
                 );
             }
 
@@ -584,7 +585,8 @@ namespace ClassicUO.Game.UI.Gumps.CharCreation
             Layer layer,
             int clilocLabel,
             int rows,
-            int columns
+            int columns,
+            Layer? layerToUseHueFrom = null
         )
         {
             CustomColorPicker colorPicker;
@@ -606,7 +608,10 @@ namespace ClassicUO.Game.UI.Gumps.CharCreation
                 1
             );
 
-            if (!CurrentColorOption.ContainsKey(layer))
+            if (layerToUseHueFrom.HasValue && CurrentColorOption.ContainsKey(layerToUseHueFrom.Value)) {
+                CurrentColorOption[layer] = CurrentColorOption[layerToUseHueFrom.Value];
+            }
+            else if (!CurrentColorOption.ContainsKey(layer))
             {
                 CurrentColorOption[layer] = new Tuple<int, ushort>(0, colorPicker.HueSelected);
             }
@@ -637,7 +642,7 @@ namespace ClassicUO.Game.UI.Gumps.CharCreation
                 }
                 else
                 {
-                    item = _character.FindItemByLayer(_characterInfo.IsFemale && e.Layer == Layer.Pants ? Layer.Skirt : e.Layer);
+                    item = _character.FindItemByLayer(e.Layer);
                 }
 
                 if (item != null)
