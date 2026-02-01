@@ -82,6 +82,7 @@ internal static class Mounts
         _mounts[0x3EE1] = new(0x0678, 0x3EE1, 0); // Horse_Elemental_Water
         _mounts[0x3EE2] = new(0x0679, 0x3EE2, 0); // Horse_Elemental_Air
         _mounts[0x3F0E] = new(0x003C, 0x3F0E, 0); // Drake
+        _mounts[0x3f0f] = new(0x00D5, 0x3F0E, 0); // Polar bear
     }
 
     public static bool TryGet(ushort animId, out MountInfo mountInfo)
